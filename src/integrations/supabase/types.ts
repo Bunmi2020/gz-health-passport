@@ -14,7 +14,155 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      availability_slots: {
+        Row: {
+          created_at: string | null
+          current_bookings: number | null
+          id: string
+          is_available: boolean | null
+          max_bookings: number | null
+          slot_date: string
+          slot_time: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_bookings?: number | null
+          id?: string
+          is_available?: boolean | null
+          max_bookings?: number | null
+          slot_date: string
+          slot_time: string
+        }
+        Update: {
+          created_at?: string | null
+          current_bookings?: number | null
+          id?: string
+          is_available?: boolean | null
+          max_bookings?: number | null
+          slot_date?: string
+          slot_time?: string
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          created_at: string | null
+          id: string
+          selected_date: string
+          selected_time: string
+          status: Database["public"]["Enums"]["booking_status"]
+          stripe_customer_id: string | null
+          stripe_payment_intent_id: string | null
+          total_amount: number
+          updated_at: string | null
+          user_email: string
+          user_phone: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          selected_date: string
+          selected_time: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          stripe_customer_id?: string | null
+          stripe_payment_intent_id?: string | null
+          total_amount: number
+          updated_at?: string | null
+          user_email: string
+          user_phone?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          selected_date?: string
+          selected_time?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          stripe_customer_id?: string | null
+          stripe_payment_intent_id?: string | null
+          total_amount?: number
+          updated_at?: string | null
+          user_email?: string
+          user_phone?: string | null
+        }
+        Relationships: []
+      }
+      intake_forms: {
+        Row: {
+          arrival_date: string | null
+          booking_id: string
+          cancellation_policy_acknowledged: boolean | null
+          capsule_endoscopy_reason: string | null
+          checkup_reason: string | null
+          chronic_diseases_details: string | null
+          created_at: string | null
+          extra_fees_acknowledged: boolean | null
+          has_chronic_diseases: boolean | null
+          has_major_surgeries: boolean | null
+          how_heard_about: string | null
+          id: string
+          major_surgeries_details: string | null
+          needs_airport_pickup: boolean | null
+          needs_hotel_help: boolean | null
+          passport_photo_url: string | null
+          payment_capture_acknowledged: boolean | null
+          preferred_hotel: string | null
+          updated_at: string | null
+          wants_capsule_endoscopy: boolean | null
+        }
+        Insert: {
+          arrival_date?: string | null
+          booking_id: string
+          cancellation_policy_acknowledged?: boolean | null
+          capsule_endoscopy_reason?: string | null
+          checkup_reason?: string | null
+          chronic_diseases_details?: string | null
+          created_at?: string | null
+          extra_fees_acknowledged?: boolean | null
+          has_chronic_diseases?: boolean | null
+          has_major_surgeries?: boolean | null
+          how_heard_about?: string | null
+          id?: string
+          major_surgeries_details?: string | null
+          needs_airport_pickup?: boolean | null
+          needs_hotel_help?: boolean | null
+          passport_photo_url?: string | null
+          payment_capture_acknowledged?: boolean | null
+          preferred_hotel?: string | null
+          updated_at?: string | null
+          wants_capsule_endoscopy?: boolean | null
+        }
+        Update: {
+          arrival_date?: string | null
+          booking_id?: string
+          cancellation_policy_acknowledged?: boolean | null
+          capsule_endoscopy_reason?: string | null
+          checkup_reason?: string | null
+          chronic_diseases_details?: string | null
+          created_at?: string | null
+          extra_fees_acknowledged?: boolean | null
+          has_chronic_diseases?: boolean | null
+          has_major_surgeries?: boolean | null
+          how_heard_about?: string | null
+          id?: string
+          major_surgeries_details?: string | null
+          needs_airport_pickup?: boolean | null
+          needs_hotel_help?: boolean | null
+          passport_photo_url?: string | null
+          payment_capture_acknowledged?: boolean | null
+          preferred_hotel?: string | null
+          updated_at?: string | null
+          wants_capsule_endoscopy?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_forms_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +171,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      booking_status:
+        | "pending_payment"
+        | "payment_authorized"
+        | "intake_submitted"
+        | "under_review"
+        | "confirmed"
+        | "cancelled"
+        | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +305,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      booking_status: [
+        "pending_payment",
+        "payment_authorized",
+        "intake_submitted",
+        "under_review",
+        "confirmed",
+        "cancelled",
+        "completed",
+      ],
+    },
   },
 } as const
