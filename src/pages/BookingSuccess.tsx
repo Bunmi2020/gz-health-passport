@@ -18,6 +18,18 @@ const BookingSuccess = () => {
     if (id) {
       setBookingId(id);
       checkBookingStatus(id);
+      
+      // Trigger reminder email to be sent after 5 minutes if form not submitted
+      supabase.functions.invoke("send-intake-reminder", {
+        body: { booking_id: id }
+      }).catch(console.error);
+      
+      // Auto-show form after 10 seconds if not clicked
+      const timer = setTimeout(() => {
+        setShowIntakeForm(true);
+      }, 10000);
+      
+      return () => clearTimeout(timer);
     } else {
       navigate("/");
     }
