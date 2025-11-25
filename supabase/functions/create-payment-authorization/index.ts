@@ -84,7 +84,7 @@ serve(async (req) => {
     // Create checkout session for payment
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      payment_method_types: ["card", "alipay", "wechat_pay"],
+      payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
