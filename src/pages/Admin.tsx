@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, CreditCard, Mail, RefreshCw } from "lucide-react";
+import { Loader2, CreditCard, Mail, RefreshCw, LogOut } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -55,7 +55,7 @@ const Admin = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        navigate("/");
+        navigate("/login");
         return;
       }
 
@@ -73,7 +73,7 @@ const Admin = () => {
           description: "You don't have admin privileges",
           variant: "destructive",
         });
-        navigate("/");
+        navigate("/login");
         return;
       }
 
@@ -81,7 +81,7 @@ const Admin = () => {
       await fetchBookings();
     } catch (error) {
       console.error("Error checking admin status:", error);
-      navigate("/");
+      navigate("/login");
     }
   };
 
@@ -195,6 +195,15 @@ const Admin = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
       pending_payment: "bg-yellow-500",
@@ -227,10 +236,16 @@ const Admin = () => {
             <h1 className="text-4xl font-serif font-bold text-foreground mb-2">Admin Dashboard</h1>
             <p className="text-muted-foreground">Manage bookings and appointments</p>
           </div>
-          <Button onClick={fetchBookings} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={fetchBookings} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+            <Button onClick={handleLogout} variant="outline">
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         {bookings.length === 0 ? (
