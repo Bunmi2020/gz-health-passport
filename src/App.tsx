@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// CHANGE: Import HashRouter instead of BrowserRouter
+import { HashRouter, Routes, Route } from "react-router-dom"; 
 import Index from "./pages/Index";
 import BookingSuccess from "./pages/BookingSuccess";
 import Login from "./pages/Login";
@@ -11,16 +12,13 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Define the base path based on the repository name
-const basename = "/gz-health-passport";
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {/* ADD basename PROP HERE */}
-      <BrowserRouter basename={basename}>
+      {/* CHANGE: Use HashRouter and remove the basename prop */}
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
@@ -29,7 +27,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
